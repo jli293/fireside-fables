@@ -1,18 +1,46 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from .routes import routes
+from os import path
 
+# Create a database
 db = SQLAlchemy()
+
+# Name of the database
 DB_NAME = "database.db"
 
+
 def create_app():
-    # Creating a new app
+    """
+    Create a new app
+    :return: app
+    """
+    # Create a new app
     app = Flask(__name__)
     app.config['SECRET_KEY'] = "Simple Secret Key"
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    # Adding the database to the application
+
+    # Add the database to the application
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
     db.init_app(app)
-    # Adding routes
+
+    # Add routes
     app.register_blueprint(routes, url_prefix="/")
+
+    # Create database
+    create_database(app)
+
     return app
+
+
+def create_database(app):
+    """
+    Create a database
+    :param app: app
+    :return: None
+    """
+    # If the database does not exist, create it
+    if not path.exists('website/' + DB_NAME):
+        with app.app_context():
+            db.create_all()
+        print("Database Created")
