@@ -2,6 +2,6 @@ from flask import Blueprint, render_template
 
 routes = Blueprint('routes', __name__)
 
-@routes.route('/')
+@routes.route('/', methods=['GET', 'POST'])
 def home():
-    return render_template("base.html")
+    return render_template('response_view.html')
