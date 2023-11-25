@@ -8,9 +8,7 @@ from openai import OpenAI
 load_dotenv()
 
 routes = Blueprint('routes', __name__)
-# OpenAI.api_key = os.getenv('OPENAI_API_KEY')
-OpenAI.api_key = "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"
-# completion = openai.Completion()
+OpenAI.api_key = os.getenv('OPENAI_API_KEY')
 client = OpenAI()
 
 
@@ -27,7 +25,7 @@ def summarize(passage, chat_log=None):
         response_format={"type": "json_object"},
         messages=[
             {"role": "system",
-             "content": "You are a helpful assistant designed for summarization tasks and outputs JSON."},
+             "content": "You are a helpful assistant designed that outputs JSON."},
             {"role": "user", "content": passage}
         ]
     )
