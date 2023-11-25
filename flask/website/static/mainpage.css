@@ -209,6 +209,13 @@ body{
     height: 0
 }
 
+.upper-right {
+    position: absolute;
+    top: 10px;  /* Adjust as needed */
+    right: 10px;  /* Adjust as needed */
+    padding: 10px;  /* Adjust as needed */
+}
+
 @media only screen and (max-width: 767px) {
     .chat-app .people-list {
         height: 465px;
