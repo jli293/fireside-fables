@@ -4,4 +4,4 @@ routes = Blueprint('routes', __name__)
 
 @routes.route('/')
 def home():
-    return "Welcome to Educative!"
+    return render_template("base.html")
