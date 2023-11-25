@@ -1,4 +1,5 @@
-from . import db
+# from . import db
+from .extensions import db
 
 
 class Result(db.Model):
