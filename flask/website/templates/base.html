@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" dir="ltr">
     <head>
         <meta charset="utf-8" />
         <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='mainpage.css') }}">
@@ -11,16 +11,18 @@
 
         <title>{% block title %}Home{% endblock %}</title>
     </head>
+
+
     <body>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="/">Welcome to Educative!</a>
+            <a class="navbar-brand" href="/">Welcome to Fireside Fables!</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
               <form class="form-inline my-2 my-lg-0" action="" method="POST">
-                <button class="btn btn-outline-success my-2 my-sm-0" name="btn" value="btn" type="submit">Search History</button>
+                <button class="btn btn-outline-success my-2 my-sm-0" name="btn" value="btn" type="submit">Story History</button>
               </form>
             </div>
             <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">

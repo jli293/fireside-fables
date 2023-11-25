@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request
 from .models import Result
 from dotenv import load_dotenv
 import os
+import time
 from openai import OpenAI
 
 
@@ -34,6 +35,32 @@ def summarize(passage, chat_log=None):
     # return response['choices'][0]['message']['content']
 
 
+def generate_bonfire_story(elements):
+    """
+    Takes in a list of elements and returns a story from GPT-3.5
+    :param elements:
+    :return:
+    """
+    story_prompt = "Create a 150-word bonfire story with the following elements: "
+
+    story_prompt = story_prompt + elements
+    story_prompt += ".\n\n"
+
+    response = client.completions.create(
+        model="gpt-3.5-turbo-instruct",
+        prompt=story_prompt,
+        temperature=0.7,
+        max_tokens=500,
+        top_p=1,
+        frequency_penalty=0,
+        presence_penalty=0
+    )
+
+    time.sleep(1)
+
+    return response.choices[0].text.strip()
+
+
 history_data = []
 @routes.route('/', methods=['GET', 'POST'])
 def home():
@@ -43,7 +70,8 @@ def home():
         if query == "" or query is None:
             return render_template('response_view.html')
 
-        response = summarize(query)
+        # response = summarize(query)
+        response = generate_bonfire_story(query)
 
         data_list = []
         query_message = Result(time="This Time", message_type="other-message float-right", message=query)

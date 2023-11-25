@@ -4,8 +4,6 @@ from .extensions import db
 from .routes import routes
 from os import path
 
-# # Create a database
-# db = SQLAlchemy()
 
 # Name of the database
 DB_NAME = "database.db"
