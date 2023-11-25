@@ -8,7 +8,8 @@ from openai import OpenAI
 load_dotenv()
 
 routes = Blueprint('routes', __name__)
-OpenAI.api_key = os.getenv('OPENAI_API_KEY')
+# OpenAI.api_key = os.getenv('OPENAI_API_KEY')
+OpenAI.api_key = "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"
 # completion = openai.Completion()
 client = OpenAI()
 
@@ -31,10 +32,33 @@ def summarize(passage, chat_log=None):
         ]
     )
 
-    # return response.choices[0].message.content
-    return response['choices'][0]['message']['content']
+    return response.choices[0].message.content
+    # return response['choices'][0]['message']['content']
 
 
+history_data = []
 @routes.route('/', methods=['GET', 'POST'])
 def home():
-    return render_template('response_view.html')
+    # for GET request, return response_view template
+    if request.method == 'GET':
+        query = request.args.get('query')
+        if query == "" or query is None:
+            return render_template('response_view.html')
+
+        response = summarize(query)
+
+        data_list = []
+        query_message = Result(time="This Time", message_type="other-message float-right", message=query)
+        response_message = Result(time="This Time", message_type="my-message", message=response)
+
+        data_list.append(query_message)
+        data_list.append(response_message)
+
+        history_data.append(query_message)
+        history_data.append(response_message)
+
+        return render_template('response_view.html', results=data_list)
+
+    # for other requests, return history template
+    else:
+        return render_template('history.html', results=history_data)
