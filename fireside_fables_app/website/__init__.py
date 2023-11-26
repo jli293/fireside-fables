@@ -1,6 +1,5 @@
 from flask import Flask
 from .extensions import db
-# from flask_sqlalchemy import SQLAlchemy
 from .routes import routes
 from os import path
 

@@ -5,47 +5,32 @@ import os
 import time
 from openai import OpenAI
 
-
+# Load the environment variables
 load_dotenv()
 
+# Create a new blueprint
 routes = Blueprint('routes', __name__)
+
+# Set the OpenAI API key
 OpenAI.api_key = os.getenv('OPENAI_API_KEY')
+
+# Create a new OpenAI client
 client = OpenAI()
-
-
-def summarize(passage, chat_log=None):
-    """
-    Takes in a query and returns a response from GPT-3.5 Turbo
-    :param passage: string
-    :param chat_log: string
-    :return: string
-    """
-    prompt = f'{chat_log}Human: {passage}\nCliff Bot:'
-    response = client.chat.completions.create(
-        model="gpt-3.5-turbo-1106",
-        response_format={"type": "json_object"},
-        messages=[
-            {"role": "system",
-             "content": "You are a helpful assistant designed that outputs JSON."},
-            {"role": "user", "content": passage}
-        ]
-    )
-
-    return response.choices[0].message.content
-    # return response['choices'][0]['message']['content']
 
 
 def generate_bonfire_story(elements):
     """
-    Takes in a list of elements and returns a story from GPT-3.5
-    :param elements:
-    :return:
+    Takes in a list of elements and returns a story from GPT-3.5 Turbo Instruct
+    :param elements: list of elements provided by the user
+    :return: story
     """
-    story_prompt = "Create a 150-word bonfire story with the following elements: "
 
+    # Story prompt for GPT-3.5 Turbo Instruct
+    story_prompt = "Create a 150-word bonfire story with the following elements: "
     story_prompt = story_prompt + elements
     story_prompt += ".\n\n"
 
+    # Call the OpenAI API to generate a story
     response = client.completions.create(
         model="gpt-3.5-turbo-instruct",
         prompt=story_prompt,
@@ -56,30 +41,47 @@ def generate_bonfire_story(elements):
         presence_penalty=0
     )
 
+    # Add a delay to prevent exceeding the API rate limit
     time.sleep(1)
 
     return response.choices[0].text.strip()
 
 
+# Create a list to store the history data
 history_data = []
+
+
 @routes.route('/', methods=['GET', 'POST'])
 def home():
+    """
+    Home page
+    :return: response_view template
+    """
     # for GET request, return response_view template
     if request.method == 'GET':
         query = request.args.get('query')
         if query == "" or query is None:
             return render_template('response_view.html')
 
-        # response = summarize(query)
+        # Generate bonfire story
         response = generate_bonfire_story(query)
 
         data_list = []
-        query_message = Result(time="This Time", message_type="other-message float-right", message=query)
-        response_message = Result(time="This Time", message_type="my-message", message=response)
 
+        # Create a new Result object
+        query_message = Result(time="This Time",
+                               message_type="other-message float-right",
+                               message=query)
+
+        # Create a new Result object
+        response_message = Result(time="This Time", message_type="my-message",
+                                  message=response)
+
+        # Add the Result objects to the list
         data_list.append(query_message)
         data_list.append(response_message)
 
+        # Add the Result objects to the history list
         history_data.append(query_message)
         history_data.append(response_message)
 
