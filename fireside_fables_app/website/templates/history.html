@@ -16,9 +16,11 @@
                 <div class="chat-history">
                     <ul class="m-b-0">
                         {% for result in results %}
-                            <li class="clearfix">
-                              <div class="message {{ result.messagetype }}"> {{ result.message }} </div>
-                            </li>
+                            {% if loop.index <= 2 or loop.index >= results|length - 1 %}
+                                <li class="clearfix">
+                                  <div class="message {{ result.messagetype }}"> {{ result.message }} </div>
+                                </li>
+                            {% endif %}
                         {% endfor %}
                     </ul>
                 </div>
