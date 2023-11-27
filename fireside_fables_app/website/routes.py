@@ -69,12 +69,11 @@ def home():
         data_list = []
 
         # Create a new Result object
-        query_message = Result(time="This Time",
-                               message_type="other-message float-right",
+        query_message = Result(message_type="other-message float-right",
                                message=query)
 
         # Create a new Result object
-        response_message = Result(time="This Time", message_type="my-message",
+        response_message = Result(message_type="my-message",
                                   message=response)
 
         # Add the Result objects to the list
@@ -89,4 +88,20 @@ def home():
 
     # for other requests, return history template
     else:
-        return render_template('history.html', results=history_data)
+        # Create a new list to store history data to render
+        history_list = []
+
+        # If there are more than 4 elements in the history_data list,
+        if len(history_data) > 6:
+            # add the first four elements to the history_list
+            history_list = history_data[:4]
+
+            # add the last two elements
+            history_list.append(history_data[-2])
+            history_list.append(history_data[-1])
+
+        # Otherwise, add all elements to the history_list
+        else:
+            history_list = history_data
+
+        return render_template('history.html', results=history_list)
