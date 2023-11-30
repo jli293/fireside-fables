@@ -81,27 +81,31 @@ def home():
         data_list.append(response_message)
 
         # Add the Result objects to the history list
-        history_data.append(query_message)
-        history_data.append(response_message)
+        if len(history_data) < 4:
+            history_data.append(query_message)
+            history_data.append(response_message)
 
         return render_template('response_view.html', results=data_list)
 
     # for other requests, return history template
     else:
-        # Create a new list to store history data to render
-        history_list = []
+        # # Create a new list to store history data to render
+        # history_list = []
+        #
+        # # If there are more than 4 elements in the history_data list,
+        # if len(history_data) > 6:
+        #     # add the first four elements to the history_list
+        #     history_list = history_data[:4]
+        #
+        #     # add the last two elements
+        #     history_list.append(history_data[-2])
+        #     history_list.append(history_data[-1])
+        #
+        # # Otherwise, add all elements to the history_list
+        # else:
+        #     history_list = history_data
+        #
+        # return render_template('history.html', results=history_list)
 
-        # If there are more than 4 elements in the history_data list,
-        if len(history_data) > 6:
-            # add the first four elements to the history_list
-            history_list = history_data[:4]
-
-            # add the last two elements
-            history_list.append(history_data[-2])
-            history_list.append(history_data[-1])
-
-        # Otherwise, add all elements to the history_list
-        else:
-            history_list = history_data
-
-        return render_template('history.html', results=history_list)
+        # Return the history template
+        return render_template('history.html', results=history_data)
